@@ -64,6 +64,23 @@ PRE_PARSED_PAPERS = {
             "isOffDay": False,
         },
     ],
+    "https://www.gov.cn/zhengce/zhengceku/202310/content_6911528.htm":[
+        {
+            "name": "元旦",
+            "date": date(2024, 1, 1),
+            "isOffDay": True
+        },
+        {
+            "name": "元旦",
+            "date": date(2024, 1, 2),
+            "isOffDay": True
+        },
+        {
+            "name": "元旦",
+            "date": date(2024, 1, 3),
+            "ifOffDay": True
+        }
+    ],
 }
 
 
@@ -73,7 +90,7 @@ def _raise_for_status_200(resp: requests.Response):
         raise requests.HTTPError(
             "request failed: %d: %s" % (resp.status_code, resp.request.url),
             response=resp,
-        )
+            )
 
 
 def _get_paper_urls(year: int) -> Iterator[str]:
@@ -263,10 +280,10 @@ class DescriptionParser:
 
         # Special case: 12 month may mean previous year
         if (
-            year is None
-            and month == 12
-            and self.date_history
-            and max(self.date_history) < date(year=self.year, month=2, day=1)
+                year is None
+                and month == 12
+                and self.date_history
+                and max(self.date_history) < date(year=self.year, month=2, day=1)
         ):
             year = self.year - 1
 
@@ -294,7 +311,7 @@ class SentenceParser:
         count = 0
         text = text.replace("(", "（").replace(")", "）")
         for i in chain(
-            *(method(self, text) for method in self.date_extraction_methods)
+                *(method(self, text) for method in self.date_extraction_methods)
         ):
             count += 1
             is_seen = i in self.parent.date_history
